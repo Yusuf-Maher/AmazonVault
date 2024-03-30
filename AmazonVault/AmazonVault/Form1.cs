@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace AmazonVault
 {
@@ -15,6 +16,19 @@ namespace AmazonVault
         public Form1()
         {
             InitializeComponent();
+        }
+        string[] names = { };
+        string[] images = { "download.png" };
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            Image newImage = Image.FromFile(@"..\..\Resources\" + images[0]);
+            Point p1 = new Point(10, 10);
+            e.Graphics.DrawImage(newImage, p1);
         }
     }
 }
