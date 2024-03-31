@@ -30,18 +30,23 @@ namespace AmazonVault
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
+            SolidBrush myBrush = new SolidBrush(Color.Black);
+            Rectangle top = new Rectangle { Location = new Point(0, 0), Height = 165, Width = this.Width};
+            e.Graphics.FillRectangle(myBrush, top);
+            myBrush = new SolidBrush(Color.SlateGray);
             //Display the products
-            Point p1 = new Point(20, 100);
+            int start = 40;
+            Point p1 = new Point(40, 200);
             int spacing = 20;
             for (int i = 0; i < images.Length; i++) {
                 if (p1.X + spacing > this.Width) {
-                    p1.X = 20;
+                    p1.X = start;
                     p1.Y += spacing;
                 }
-                SolidBrush myBrush = new SolidBrush(Color.AntiqueWhite);
                 Rectangle productCover = new Rectangle { Location = new Point(p1.X - 14, p1.Y - 14), Height = 165, Width = 122};
                 e.Graphics.FillRectangle(myBrush, productCover);
                 Image productImage = Image.FromFile(@"..\..\Resources\" + images[i]);
+                productImage = (Image)(new Bitmap(productImage, new Size(productCover.Width-30, productCover.Height-74)));
                 Label productName = new Label { Location = new Point(p1.X+productImage.Width/4, p1.Y + productImage.Height + 35), AutoSize = true, Text = names[i], Font = new Font("Arial", 12) };
                 
                 float averageRating = findAverageRating(i);
@@ -73,8 +78,22 @@ namespace AmazonVault
                 }
                 e.Graphics.DrawImage(productImage, p1);
                 Controls.Add(productName);
+                Button productClick = new Button();
+                productClick.Location = productCover.Location;
+                productClick.Height = productCover.Height;
+                productClick.Width = productCover.Width;
+                productClick.FlatStyle = FlatStyle.Flat;
+                productClick.FlatAppearance.MouseDownBackColor = Color.Transparent;
+                productClick.FlatAppearance.MouseOverBackColor = Color.Transparent;
+                productClick.BackColor = Color.Transparent;
+                productClick.Click += new EventHandler(this.productClick_Click);
+                Controls.Add(productClick);
                 p1.X += spacing;
             }
+        }
+
+        private void productClick_Click(object sender, EventArgs e) {
+            textBox1.Text = "";
         }
 
         private float findAverageRating(int productNumber) {
