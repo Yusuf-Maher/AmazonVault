@@ -17,18 +17,72 @@ namespace AmazonVault
         {
             InitializeComponent();
         }
-        string[] names = { };
+
+        string[] names = {"Smile"};
         string[] images = { "download.png" };
+        int[] prices = {2};
+        float[,] ratings = { { 4.5f } };
+        string[,] reviews = { { "Very good" } };
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
         }
-
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            Image newImage = Image.FromFile(@"..\..\Resources\" + images[0]);
-            Point p1 = new Point(10, 10);
-            e.Graphics.DrawImage(newImage, p1);
+            //Display the products
+            Point p1 = new Point(20, 100);
+            int spacing = 20;
+            for (int i = 0; i < images.Length; i++) {
+                if (p1.X + spacing > this.Width) {
+                    p1.X = 20;
+                    p1.Y += spacing;
+                }
+                Image productImage = Image.FromFile(@"..\..\Resources\" + images[i]);
+                Label productName = new Label { Location = new Point(p1.X+productImage.Width/4, p1.Y + productImage.Height + 50), AutoSize = true, Text = names[i], Font = new Font("Arial", 12) };
+                float averageRating = findAverageRating(i);
+                for (float n = 0; n < 5; n+=0.5f) {
+                    string star;
+                    float offset;
+                    if (Math.Floor(n) == n) {
+                        if (n > averageRating) {
+                            star = "leftHalfEmpty.png";
+                        } else {
+                            star = "leftHalfFilled.png";
+                        }
+                        offset = -1;
+                    } else {
+                        if (n > averageRating) {
+                            star = "rightHalfEmpty.png";
+                        } else {
+                            star = "rightHalfFilled.png";
+                        }
+                        offset = -1f;
+                    }
+                    //here
+                    Image starImage = Image.FromFile(@"..\..\Resources\" + star);
+                    starImage = (Image)(new Bitmap(starImage, new Size(starImage.Width, starImage.Height)));
+                    e.Graphics.DrawImage(starImage, p1.X+5+(int)n*starImage.Width*2+(int)offset*starImage.Width*2, p1.Y + productImage.Height + 10);
+                }
+                e.Graphics.DrawImage(productImage, p1);
+                Controls.Add(productName);
+                p1.X += spacing;
+            }
+        }
+
+        private float findAverageRating(int productNumber) {
+            float average = 0;
+            for (int i = 0; i < ratings.GetLength(productNumber); i++) {
+                average += ratings[productNumber, i];
+            }
+            average /= ratings.GetLength(productNumber);
+            return (float)(Math.Round(average) + Math.Floor(average))/2;
+        }
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            
+            this.Invalidate();
+            //Sort function
         }
     }
 }

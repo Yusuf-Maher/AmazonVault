@@ -81,6 +81,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\download.png" />
+    <Content Include="Resources\leftHalfEmpty.png" />
+    <Content Include="Resources\leftHalfFilled.png" />
+    <Content Include="Resources\rightHalfEmpty.png" />
+    <Content Include="Resources\rightHalfFilled.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
