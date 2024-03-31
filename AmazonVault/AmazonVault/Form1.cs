@@ -21,7 +21,7 @@ namespace AmazonVault
         string[] names = {"Smile"};
         string[] images = { "download.png" };
         int[] prices = {2};
-        float[,] ratings = { { 4.5f } };
+        float[,] ratings = { { 3f } };
         string[,] reviews = { { "Very good" } };
 
         private void Form1_Load(object sender, EventArgs e)
@@ -41,28 +41,33 @@ namespace AmazonVault
                 Image productImage = Image.FromFile(@"..\..\Resources\" + images[i]);
                 Label productName = new Label { Location = new Point(p1.X+productImage.Width/4, p1.Y + productImage.Height + 50), AutoSize = true, Text = names[i], Font = new Font("Arial", 12) };
                 float averageRating = findAverageRating(i);
+                int scale = 10;
+                int increment = 5;
+                int starsWidth = 10*(int)(86f/(float)scale)+increment*5;
+                int currX = 0;
                 for (float n = 0; n < 5; n+=0.5f) {
                     string star;
-                    float offset;
+                    
                     if (Math.Floor(n) == n) {
                         if (n > averageRating) {
                             star = "leftHalfEmpty.png";
                         } else {
+                            MessageBox.Show(Convert.ToString(n) + "n");
                             star = "leftHalfFilled.png";
                         }
-                        offset = -1;
+                        currX += increment;
                     } else {
                         if (n > averageRating) {
                             star = "rightHalfEmpty.png";
                         } else {
                             star = "rightHalfFilled.png";
                         }
-                        offset = -1f;
                     }
+                    currX += (int)(86f/(float)scale);
                     //here
                     Image starImage = Image.FromFile(@"..\..\Resources\" + star);
-                    starImage = (Image)(new Bitmap(starImage, new Size(starImage.Width, starImage.Height)));
-                    e.Graphics.DrawImage(starImage, p1.X+5+(int)n*starImage.Width*2+(int)offset*starImage.Width*2, p1.Y + productImage.Height + 10);
+                    starImage = (Image)(new Bitmap(starImage, new Size(starImage.Width/scale, starImage.Height/scale)));
+                    e.Graphics.DrawImage(starImage, productName.Location.X+currX-starsWidth/2, p1.Y + productImage.Height + 10);
                 }
                 e.Graphics.DrawImage(productImage, p1);
                 Controls.Add(productName);
