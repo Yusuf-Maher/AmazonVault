@@ -21,12 +21,12 @@ namespace AmazonVault
         string[] names = {"Smile"};
         string[] images = { "download.png" };
         int[] prices = {2};
-        float[,] ratings = { { 3f } };
+        float[,] ratings = { { 4f } };
         string[,] reviews = { { "Very good" } };
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            this.DoubleBuffered = true;
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
@@ -38,21 +38,23 @@ namespace AmazonVault
                     p1.X = 20;
                     p1.Y += spacing;
                 }
+                SolidBrush myBrush = new SolidBrush(Color.AntiqueWhite);
+                Rectangle productCover = new Rectangle { Location = new Point(p1.X - 14, p1.Y - 14), Height = 165, Width = 122};
+                e.Graphics.FillRectangle(myBrush, productCover);
                 Image productImage = Image.FromFile(@"..\..\Resources\" + images[i]);
-                Label productName = new Label { Location = new Point(p1.X+productImage.Width/4, p1.Y + productImage.Height + 50), AutoSize = true, Text = names[i], Font = new Font("Arial", 12) };
+                Label productName = new Label { Location = new Point(p1.X+productImage.Width/4, p1.Y + productImage.Height + 35), AutoSize = true, Text = names[i], Font = new Font("Arial", 12) };
+                
                 float averageRating = findAverageRating(i);
                 int scale = 10;
                 int increment = 5;
-                int starsWidth = 10*(int)(86f/(float)scale)+increment*5;
+                int starsWidth = 8*(int)(86f/(float)scale)+increment*5;
                 int currX = 0;
-                for (float n = 0; n < 5; n+=0.5f) {
+                for (float n = 0.5f; n <= 5; n+=0.5f) {
                     string star;
-                    
-                    if (Math.Floor(n) == n) {
+                    if (Math.Floor(n) != n) {
                         if (n > averageRating) {
                             star = "leftHalfEmpty.png";
                         } else {
-                            MessageBox.Show(Convert.ToString(n) + "n");
                             star = "leftHalfFilled.png";
                         }
                         currX += increment;
@@ -64,7 +66,7 @@ namespace AmazonVault
                         }
                     }
                     currX += (int)(86f/(float)scale);
-                    //here
+
                     Image starImage = Image.FromFile(@"..\..\Resources\" + star);
                     starImage = (Image)(new Bitmap(starImage, new Size(starImage.Width/scale, starImage.Height/scale)));
                     e.Graphics.DrawImage(starImage, productName.Location.X+currX-starsWidth/2, p1.Y + productImage.Height + 10);
@@ -81,11 +83,10 @@ namespace AmazonVault
                 average += ratings[productNumber, i];
             }
             average /= ratings.GetLength(productNumber);
-            return (float)(Math.Round(average) + Math.Floor(average))/2;
+            return (float)(Math.Round(average, MidpointRounding.AwayFromZero) + Math.Floor(average))/2;
         }
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            
             this.Invalidate();
             //Sort function
         }
