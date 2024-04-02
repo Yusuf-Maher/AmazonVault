@@ -96,6 +96,7 @@ namespace AmazonVault
         }
 
         private void product(object sender, EventArgs e, int productNum) {
+            textBox1.Text = "";
             //Display product
         }
 
