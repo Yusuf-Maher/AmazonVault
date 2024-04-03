@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows;
 using System.IO;
 
 namespace AmazonVault
@@ -288,8 +289,8 @@ namespace AmazonVault
         {
             textBox1.Location = new Point(this.Width/2-textBox1.Width/2, textBox1.Location.Y);
             SolidBrush myBrush = new SolidBrush(Color.Black);
-            e.Graphics.FillRectangle(myBrush, new Rectangle { Location = new Point(0, 0), Height = 165, Width = this.Width });
-            myBrush = new SolidBrush(Color.SlateGray);
+            e.Graphics.FillRectangle(myBrush, new Rectangle { Location = new Point(0, 0), Height = 165, Width = this.Width});
+            myBrush = new SolidBrush(Color.Transparent);
             //Display the products
             int start = 40;
             Point p1 = new Point(40, 200);
@@ -300,13 +301,12 @@ namespace AmazonVault
                     p1.Y += 200;
                 }
                 
-                Rectangle productCover = new Rectangle { Location = new Point(p1.X - 14, p1.Y - 14), Height = 165, Width = 122};
-                e.Graphics.FillRectangle(myBrush, productCover);
+                
                 Image productImage = Image.FromFile(@"..\..\Resources\" + items[i]);
-                productImage = (Image)(new Bitmap(productImage, new Size(productCover.Width-30, productCover.Height-74)));
+                productImage = (Image)(new Bitmap(productImage, new Size(122-30, 165-74)));
                 //fix
-                Label productName = new Label {AutoSize = true, Text = items[i].Substring(0, items[i].Length-4), Font = new Font("Arial", 12) };
-                productName.Location = new Point(productCover.X+5, p1.Y + productImage.Height + 35);
+                Label productName = new Label {AutoSize = true, Text = items[i].Substring(0, items[i].Length-4), Font = new Font("Arial", 8) };
+                productName.Location = new Point(p1.X, p1.Y + productImage.Height + 35);
                 productName.Click += (s, args) => product(productName, e, i);
                 Controls.Add(productName);
                 float averageRating = findAverageRating(i);
@@ -334,7 +334,7 @@ namespace AmazonVault
 
                     Image starImage = Image.FromFile(@"..\..\Resources\" + star);
                     starImage = (Image)(new Bitmap(starImage, new Size(starImage.Width/scale, starImage.Height/scale)));
-                    e.Graphics.DrawImage(starImage, productCover.X + currX - 4, p1.Y + productImage.Height + 10);
+                    e.Graphics.DrawImage(starImage, p1.X + currX - 18, p1.Y + productImage.Height + 10);
                 }
                 e.Graphics.DrawImage(productImage, p1);
                 /*Button productClick = new Button {Location = productCover.Location, Height = productCover.Height, Width = productCover.Width, BackColor = Color.Transparent};
@@ -343,6 +343,11 @@ namespace AmazonVault
                 productClick.FlatAppearance.MouseOverBackColor = Color.Transparent;
                 productClick.Click += (s, args) => product(productClick, e, i);
                 Controls.Add(productClick);*/
+                //Rectangle productCover = new Rectangle { Location = new Point(p1.X - 14, p1.Y - 14), Height = 165, Width = 122 };
+                //e.Graphics.FillRectangle(myBrush, productCover);
+                Label cover = new Label {Location = new Point(p1.X - 14, p1.Y - 14), Height = 165, Width = 122, Text = "", BackColor = Color.Transparent};
+                Controls.Add(cover);
+                cover.Click += (s, args) => product(cover, e, i);
                 p1.X += spacing;
             }
         }
