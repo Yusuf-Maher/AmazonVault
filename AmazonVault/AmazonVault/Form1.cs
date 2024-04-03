@@ -26,7 +26,7 @@ namespace AmazonVault
             "Neck Travel Pillow.jpg",
             "Aromatherapy diffuser.jpg",
             "Portable Charger.png",
-            "Resistance band.png",
+            "Resistance band.jpg",
             "Electric kettle.png",
             "Backpack.jpg",
             "Sketchbook.jpg",
@@ -294,18 +294,19 @@ namespace AmazonVault
             int start = 40;
             Point p1 = new Point(40, 200);
             int spacing = 150;
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 10; i++) {
                 if (p1.X + spacing > this.Width) {
                     p1.X = start;
-                    p1.Y += spacing;
+                    p1.Y += 200;
                 }
+                
                 Rectangle productCover = new Rectangle { Location = new Point(p1.X - 14, p1.Y - 14), Height = 165, Width = 122};
                 e.Graphics.FillRectangle(myBrush, productCover);
                 Image productImage = Image.FromFile(@"..\..\Resources\" + items[i]);
                 productImage = (Image)(new Bitmap(productImage, new Size(productCover.Width-30, productCover.Height-74)));
                 //fix
                 Label productName = new Label {AutoSize = true, Text = items[i].Substring(0, items[i].Length-4), Font = new Font("Arial", 12) };
-                productName.Location = new Point(productCover.X-(productCover.X+productName.Width/2-productCover.Width/2), p1.Y + productImage.Height + 35);
+                productName.Location = new Point(productCover.X+5, p1.Y + productImage.Height + 35);
                 productName.Click += (s, args) => product(productName, e, i);
                 Controls.Add(productName);
                 float averageRating = findAverageRating(i);
@@ -333,15 +334,15 @@ namespace AmazonVault
 
                     Image starImage = Image.FromFile(@"..\..\Resources\" + star);
                     starImage = (Image)(new Bitmap(starImage, new Size(starImage.Width/scale, starImage.Height/scale)));
-                    e.Graphics.DrawImage(starImage, productName.Location.X+currX-starsWidth/2, p1.Y + productImage.Height + 10);
+                    e.Graphics.DrawImage(starImage, productCover.X + currX - 4, p1.Y + productImage.Height + 10);
                 }
                 e.Graphics.DrawImage(productImage, p1);
-                Button productClick = new Button {Location = productCover.Location, Height = productCover.Height, Width = productCover.Width, BackColor = Color.Transparent};
+                /*Button productClick = new Button {Location = productCover.Location, Height = productCover.Height, Width = productCover.Width, BackColor = Color.Transparent};
                 productClick.FlatStyle = FlatStyle.Flat;
                 productClick.FlatAppearance.MouseDownBackColor = Color.Transparent;
                 productClick.FlatAppearance.MouseOverBackColor = Color.Transparent;
                 productClick.Click += (s, args) => product(productClick, e, i);
-                Controls.Add(productClick);
+                Controls.Add(productClick);*/
                 p1.X += spacing;
             }
         }
